@@ -1036,12 +1036,12 @@ MonoBehaviour:
     damage: 25
     range: 2
     angle: 60
-    duration: 0.6
+    duration: 0.4
   - nombre: Golpe final
     damage: 40
     range: 3
     angle: 90
-    duration: 0.8
+    duration: 0.6
   comboResetTime: 1
   enemyLayer:
     serializedVersion: 2
