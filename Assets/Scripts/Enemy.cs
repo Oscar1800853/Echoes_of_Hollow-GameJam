@@ -7,18 +7,18 @@ public class Enemy : MonoBehaviour
     private int currentHealth;
 
     [Header("Feedback opcional")]
-    public GameObject deathEffect; // Partículas o animación al morir
+    public GameObject deathEffect; // Partï¿½culas o animaciï¿½n al morir
 
     void Start()
     {
         currentHealth = maxHealth;
     }
 
-    // Función que recibe daño
+    // Funciï¿½n que recibe daï¿½o
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
-        Debug.Log(gameObject.name + " recibió " + amount + " de daño. Vida restante: " + currentHealth);
+        Debug.Log(gameObject.name + " recibie " + amount + " de danio. Vida restante: " + currentHealth);
 
         if (currentHealth <= 0)
         {

@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(PlayerInput))]
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movimiento")]
@@ -12,24 +15,107 @@ public class PlayerMovement : MonoBehaviour
     public float dashCooldown = 1f;
 
     [Header("Rotación")]
-    public Camera mainCamera; // Asigna tu cámara en el inspector
+    public Camera mainCamera;
+
+    [HideInInspector]
+    public bool canMove = true; // Bloquea movimiento temporalmente
 
     private CharacterController controller;
+    private PlayerInput playerInput;
+
+    private Vector2 moveInput;
     private Vector3 moveDirection;
+
     private bool isDashing = false;
     private float dashTime = 0f;
     private float lastDashTime = -999f;
 
-    void Start()
+    private InputAction moveAction;
+    private InputAction dashAction;
+
+    private static PlayerMovement instance;
+
+    void Awake()
     {
+        // Instancia única y persistente
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+
         controller = GetComponent<CharacterController>();
+        playerInput = GetComponent<PlayerInput>();
 
         if (mainCamera == null)
             mainCamera = Camera.main;
+
+        var actions = playerInput.actions;
+        if (actions != null)
+        {
+            moveAction = actions.FindAction("Move");
+            dashAction = actions.FindAction("Dash");
+
+            if (dashAction == null)
+            {
+                dashAction = new InputAction("Dash", InputActionType.Button);
+                dashAction.AddBinding("<Keyboard>/space");
+                dashAction.AddBinding("<Gamepad>/buttonSouth");
+                dashAction.Enable();
+            }
+        }
+
+        playerInput.notificationBehavior = PlayerNotifications.InvokeUnityEvents;
+    }
+
+    void OnEnable()
+    {
+        moveAction?.Enable();
+        dashAction?.Enable();
+
+        if (moveAction != null)
+        {
+            moveAction.performed += OnMove;
+            moveAction.canceled += OnMove;
+        }
+
+        if (dashAction != null)
+            dashAction.performed += OnDash;
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        if (moveAction != null)
+        {
+            moveAction.performed -= OnMove;
+            moveAction.canceled -= OnMove;
+        }
+
+        if (dashAction != null)
+            dashAction.performed -= OnDash;
+
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        mainCamera = Camera.main;
+
+        if (playerInput != null && !playerInput.enabled)
+            playerInput.enabled = true;
+
+        controller.enabled = false;
+        controller.enabled = true;
     }
 
     void Update()
     {
+        if (!canMove) return;
+
         if (isDashing)
         {
             controller.Move(moveDirection * dashSpeed * Time.deltaTime);
@@ -39,10 +125,6 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-
-        // --- Movimiento relativo a cámara ---
         Vector3 camForward = mainCamera.transform.forward;
         Vector3 camRight = mainCamera.transform.right;
         camForward.y = 0f;
@@ -50,17 +132,24 @@ public class PlayerMovement : MonoBehaviour
         camForward.Normalize();
         camRight.Normalize();
 
-        moveDirection = (camForward * vertical + camRight * horizontal);
-        if (moveDirection.magnitude > 1f)
-            moveDirection.Normalize();
+        Vector3 inputDir = camForward * moveInput.y + camRight * moveInput.x;
+        if (inputDir.magnitude > 1f)
+            inputDir.Normalize();
 
+        moveDirection = inputDir;
         controller.Move(moveDirection * speed * Time.deltaTime);
 
-        // --- Rotación hacia el ratón ---
         RotateTowardsMouse();
+    }
 
-        // --- Dash ---
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time >= lastDashTime + dashCooldown && moveDirection != Vector3.zero)
+    void OnMove(InputAction.CallbackContext context)
+    {
+        moveInput = context.ReadValue<Vector2>();
+    }
+
+    void OnDash(InputAction.CallbackContext context)
+    {
+        if (context.performed && Time.time >= lastDashTime + dashCooldown && moveDirection != Vector3.zero)
         {
             isDashing = true;
             dashTime = 0f;
@@ -70,7 +159,9 @@ public class PlayerMovement : MonoBehaviour
 
     void RotateTowardsMouse()
     {
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        if (mainCamera == null || Mouse.current == null) return;
+
+        Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
         Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
 
         if (groundPlane.Raycast(ray, out float distance))
@@ -87,8 +178,5 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public Vector3 GetMoveDirection()
-    {
-        return moveDirection;
-    }
+    public Vector3 GetMoveDirection() => moveDirection;
 }
