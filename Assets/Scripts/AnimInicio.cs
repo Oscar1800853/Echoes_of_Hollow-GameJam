@@ -1,0 +1,121 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.Video;
+
+public class AnimInicio : MonoBehaviour
+{
+    [Header("Configuración de Video")]
+    public VideoPlayer videoPlayer;
+    
+    [Header("Configuración de Tiempos")]
+    [Tooltip("Tiempo hasta que aparece la elección (en segundos)")]
+    public float tiempoHastaEleccion = 4f; //ajustar mas adelante
+    
+    [Header("UI de Elección")]
+    public GameObject panelEleccion;
+    
+    private bool eleccionMostrada = false;
+    private bool cinematicaCompletada = false;
+    
+    void Start()
+    {
+        if(panelEleccion != null)
+            panelEleccion.SetActive(false);
+        
+        if(videoPlayer != null)
+        {
+            videoPlayer.Play();
+            // Suscribirse al evento cuando el video termina
+            videoPlayer.loopPointReached += OnVideoFinished;
+        }
+            
+        StartCoroutine(AnimInicial());
+    }
+    
+    void Update()
+    {
+        // Solo permitir saltar si no se ha mostrado la elección aún
+        if(Input.GetKeyDown(KeyCode.Space) && !eleccionMostrada && !cinematicaCompletada)
+        {
+            StopAllCoroutines();
+            SaltarAEleccion();
+        }
+    }
+    
+    private IEnumerator AnimInicial()
+    {
+        yield return new WaitForSeconds(tiempoHastaEleccion);
+        
+        if(!cinematicaCompletada)
+        {
+            MostrarEleccion();
+        }
+    }
+    
+    private void SaltarAEleccion()
+    {
+        // Adelantar el video al momento de la elección
+        if(videoPlayer != null)
+        {
+            videoPlayer.time = tiempoHastaEleccion;
+        }
+        MostrarEleccion();
+    }
+    
+    private void MostrarEleccion()
+    {
+        eleccionMostrada = true;
+        
+        // Pausar el video
+        if(videoPlayer != null)
+            videoPlayer.Pause();
+        
+        if(panelEleccion != null)
+            panelEleccion.SetActive(true);
+    }
+    
+    public void ElegirSeguir()
+    {
+        cinematicaCompletada = true;
+        
+        if(panelEleccion != null)
+            panelEleccion.SetActive(false);
+        
+        // Reanudar el video
+        if(videoPlayer != null)
+            videoPlayer.Play();
+    }
+    
+    public void ElegirFinalAlternativo()
+    {
+        cinematicaCompletada = true;
+        
+        if(panelEleccion != null)
+            panelEleccion.SetActive(false);
+        
+        // Detener el video
+        if(videoPlayer != null)
+            videoPlayer.Stop();
+        
+        SceneManager.LoadScene("FinalAlternativo");
+    }
+    
+    private void OnVideoFinished(VideoPlayer vp)
+    {
+        // Cuando el video termina, ir al nivel
+        if(cinematicaCompletada)
+        {
+            SceneManager.LoadScene("Level");
+        }
+    }
+    
+    void OnDestroy()
+    {
+        // Limpiar el evento
+        if(videoPlayer != null)
+            videoPlayer.loopPointReached -= OnVideoFinished;
+    }
+}
+
