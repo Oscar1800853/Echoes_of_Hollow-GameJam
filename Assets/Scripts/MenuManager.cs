@@ -20,6 +20,12 @@ public class MenuManagement : MonoBehaviour
         guiaActiva = true;
     }
 
+    public void QuitGame()
+    {
+        Application.Quit();
+        Debug.Log("Se ha cerrado el juego");
+    }
+
     void Update()
     {
         if (guiaActiva && Input.GetKeyDown(KeyCode.Escape))
