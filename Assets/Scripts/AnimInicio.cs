@@ -11,7 +11,7 @@ public class AnimInicio : MonoBehaviour
     
     [Header("Configuración de Tiempos")]
     [Tooltip("Tiempo hasta que aparece la elección (en segundos)")]
-    public float tiempoHastaEleccion = 4f; //ajustar mas adelante
+    public float tiempoHastaEleccion = 2f; //ajustar mas adelante
     
     [Header("UI de Elección")]
     public GameObject panelEleccion;
@@ -107,7 +107,7 @@ public class AnimInicio : MonoBehaviour
         // Cuando el video termina, ir al nivel
         if(cinematicaCompletada)
         {
-            SceneManager.LoadScene("Level");
+            SceneManager.LoadScene("Nivel1Inicio");
         }
     }
     
