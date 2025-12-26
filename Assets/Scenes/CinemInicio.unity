@@ -338,7 +338,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1416161890}
+      - m_Target: {fileID: 1300633060}
         m_TargetAssemblyTypeName: AnimInicio, Assembly-CSharp
         m_MethodName: ElegirSeguir
         m_Mode: 1
@@ -838,7 +838,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimInicio
   videoPlayer: {fileID: 938790338}
-  tiempoHastaEleccion: 4
+  tiempoHastaEleccion: 2
   panelEleccion: {fileID: 1416161888}
 --- !u!1 &1416161888
 GameObject:
@@ -1212,7 +1212,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1416161890}
+      - m_Target: {fileID: 1300633060}
         m_TargetAssemblyTypeName: AnimInicio, Assembly-CSharp
         m_MethodName: ElegirFinalAlternativo
         m_Mode: 1

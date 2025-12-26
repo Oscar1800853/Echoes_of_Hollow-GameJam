@@ -18,6 +18,7 @@ public class AnimInicio : MonoBehaviour
     
     private bool eleccionMostrada = false;
     private bool cinematicaCompletada = false;
+    private bool debeCargarNivel = false;
     
     void Start()
     {
@@ -41,6 +42,16 @@ public class AnimInicio : MonoBehaviour
         {
             StopAllCoroutines();
             SaltarAEleccion();
+        }
+        
+        // Verificar continuamente si el video ha terminado cuando debe cargar el nivel
+        if(debeCargarNivel && videoPlayer != null)
+        {
+            // Verificar si el video está cerca del final o ya terminó
+            if(!videoPlayer.isPlaying || videoPlayer.time >= videoPlayer.length - 0.1f)
+            {
+                CargarNivel();
+            }
         }
     }
     
@@ -79,13 +90,21 @@ public class AnimInicio : MonoBehaviour
     public void ElegirSeguir()
     {
         cinematicaCompletada = true;
+        debeCargarNivel = true;
         
+        // Asegurarse de ocultar el panel
         if(panelEleccion != null)
+        {
             panelEleccion.SetActive(false);
+            Debug.Log("Panel ocultado");
+        }
         
         // Reanudar el video
         if(videoPlayer != null)
+        {
             videoPlayer.Play();
+            Debug.Log($"Video reanudado. Tiempo actual: {videoPlayer.time}, Duración: {videoPlayer.length}");
+        }
     }
     
     public void ElegirFinalAlternativo()
@@ -105,10 +124,20 @@ public class AnimInicio : MonoBehaviour
     private void OnVideoFinished(VideoPlayer vp)
     {
         // Cuando el video termina, ir al nivel
-        if(cinematicaCompletada)
+        if(debeCargarNivel)
         {
-            SceneManager.LoadScene("Nivel1Inicio");
+            CargarNivel();
         }
+    }
+    
+    private void CargarNivel()
+    {
+        // Evitar cargar múltiples veces
+        if(!debeCargarNivel) return;
+        
+        debeCargarNivel = false;
+        Debug.Log("Cargando Nivel1Inicio");
+        SceneManager.LoadScene("Nivel1Inicio");
     }
     
     void OnDestroy()
@@ -118,4 +147,3 @@ public class AnimInicio : MonoBehaviour
             videoPlayer.loopPointReached -= OnVideoFinished;
     }
 }
-
