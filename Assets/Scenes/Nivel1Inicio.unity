@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8cd9045e9a74064595afe07f5c57f2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneEntrance
-  lastExitName: PuertaTeleport
+  lastExitName: PuertaInicio
 --- !u!65 &22055340
 BoxCollider:
   m_ObjectHideFlags: 0
