@@ -9,7 +9,7 @@ public class SceneEntrance : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (PlayerPref.GetString("LastExitName") == lastExitName)
+        if (PlayerPrefs.GetString("LastExitName") == lastExitName)
         {
             PlayerScript.instance.transform.position = transform.position;
             PlayerScript.instance.transform.eulerAngles = transform.eulerAngles;
