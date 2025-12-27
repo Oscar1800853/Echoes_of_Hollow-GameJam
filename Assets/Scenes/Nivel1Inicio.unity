@@ -2004,6 +2004,7 @@ GameObject:
   - component: {fileID: 1715989317}
   - component: {fileID: 1715989316}
   - component: {fileID: 1715989315}
+  - component: {fileID: 1715989323}
   - component: {fileID: 1715989314}
   - component: {fileID: 1715989322}
   - component: {fileID: 1715989321}
@@ -2297,6 +2298,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4452d05b15a3ce42bfbd6b42ef615fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerScript
+--- !u!114 &1715989323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1715989310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8aac98e987a3e4ab8be72c304de5fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  maxHealth: 100
+  currentHealth: 100
+  damagePerContact: 10
+  damageCooldown: 1
 --- !u!1 &1788909704
 GameObject:
   m_ObjectHideFlags: 0
