@@ -7,7 +7,12 @@ public class IsoCameraFollow : MonoBehaviour
     public Vector3 offset = new Vector3(-10, 10, -10); // Posición isométrica relativa
     public float smoothSpeed = 5f;  // Suavidad del seguimiento
 
+    [Header("Control de Activación")]
+    [Tooltip("Nombre de la escena a partir de la cual la cámara empieza a seguir")]
+    public string escenaActivacion = "Nivel1Inicio";
+    
     private static IsoCameraFollow instance;
+    private bool seguimientoActivo = false;
 
     void Awake()
     {
@@ -26,7 +31,7 @@ public class IsoCameraFollow : MonoBehaviour
 
     void Start()
     {
-        FindPlayer();
+        VerificarEscenaActual();
     }
 
     void OnDestroy()
@@ -38,8 +43,26 @@ public class IsoCameraFollow : MonoBehaviour
     // Se llama cada vez que se carga una nueva escena
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Buscar al jugador en la nueva escena
-        FindPlayer();
+        VerificarEscenaActual();
+    }
+
+    void VerificarEscenaActual()
+    {
+        string escenaActual = SceneManager.GetActiveScene().name;
+        
+        // Verificar si estamos en la escena de activación o posteriores
+        if (escenaActual == escenaActivacion || seguimientoActivo)
+        {
+            seguimientoActivo = true;
+            FindPlayer();
+            Debug.Log($"[IsoCameraFollow] Seguimiento activado en escena: {escenaActual}");
+        }
+        else
+        {
+            // Limpiar el target si estamos antes de la escena de activación
+            target = null;
+            Debug.Log($"[IsoCameraFollow] Seguimiento desactivado en escena: {escenaActual}");
+        }
     }
 
     void FindPlayer()
@@ -58,6 +81,10 @@ public class IsoCameraFollow : MonoBehaviour
 
     void LateUpdate()
     {
+        // Solo seguir al jugador si el seguimiento está activo
+        if (!seguimientoActivo)
+            return;
+
         // Si no hay target, intentar buscarlo
         if (target == null)
         {

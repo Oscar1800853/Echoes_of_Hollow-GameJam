@@ -125,6 +125,13 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
+        // Verificar que mainCamera existe antes de usarla
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main;
+            if (mainCamera == null) return; // Si aún no hay cámara, esperar al siguiente frame
+        }
+
         Vector3 camForward = mainCamera.transform.forward;
         Vector3 camRight = mainCamera.transform.right;
         camForward.y = 0f;
@@ -159,9 +166,16 @@ public class PlayerMovement : MonoBehaviour
 
     void RotateTowardsMouse()
     {
-        if (mainCamera == null || Mouse.current == null) return;
+        // Verificación más robusta antes de acceder a Mouse.current
+        if (mainCamera == null) return;
+        
+        // Verificar que Mouse.current existe y está disponible
+        if (Mouse.current == null) return;
+        
+        // Verificar que la posición del mouse está disponible
+        Vector2 mousePosition = Mouse.current.position.ReadValue();
 
-        Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+        Ray ray = mainCamera.ScreenPointToRay(mousePosition);
         Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
 
         if (groundPlane.Raycast(ray, out float distance))
