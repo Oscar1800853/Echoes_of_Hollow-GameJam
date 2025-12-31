@@ -30,6 +30,21 @@ EditorBuildSettings:
     path: Assets/Scenes/Nivel2Poblado.unity
     guid: c30600d9989c25d4491f2b26806382b7
   - enabled: 1
+    path: Assets/Scenes/Nivel2Inicio.unity
+    guid: d8b03db25559a4d4eb11d5706f981f56
+  - enabled: 1
+    path: Assets/Scenes/Nivel2C1.1.unity
+    guid: f4c03687ac9a91c48985bb4e0a600482
+  - enabled: 1
+    path: Assets/Scenes/Nivel2C2.1.unity
+    guid: 2c7244178cb1d8f4d97351b15a63d8bc
+  - enabled: 1
+    path: Assets/Scenes/Nivel2C1.2.unity
+    guid: 2e12c24d32ab8ae48b8edf839c90a402
+  - enabled: 1
+    path: Assets/Scenes/Nivel2C2.2.unity
+    guid: 14117b15d94c6e244865e269c4bc628c
+  - enabled: 1
     path: Assets/Scenes/Pruebas.unity
     guid: 99c9720ab356a0642a771bea13969a05
   m_configObjects:
