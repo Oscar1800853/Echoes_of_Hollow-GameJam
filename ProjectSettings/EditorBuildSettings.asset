@@ -48,6 +48,21 @@ EditorBuildSettings:
     path: Assets/Scenes/Nivel2Final.unity
     guid: e6524e1e884165948bf2e556e784286f
   - enabled: 1
+    path: Assets/Scenes/Nivel3Inicio.unity
+    guid: 7c40659fced371b4ba00c137c5fdaf69
+  - enabled: 1
+    path: Assets/Scenes/Nivel3.1.unity
+    guid: 20bf49c9ebbc5d243b16f4c389b576d7
+  - enabled: 1
+    path: Assets/Scenes/Nivel3.2.unity
+    guid: 2e45a17c071fd5b44891714fe2cd5c67
+  - enabled: 1
+    path: Assets/Scenes/Nivel3Boss.unity
+    guid: a77c5f9597ee7e0418ba85ee3695d05c
+  - enabled: 1
+    path: Assets/Scenes/CinemFinal.unity
+    guid: 5fdec9cd1c817304cbcd74c12cf52dee
+  - enabled: 1
     path: Assets/Scenes/Pruebas.unity
     guid: 99c9720ab356a0642a771bea13969a05
   m_configObjects:
