@@ -30382,7 +30382,6 @@ MonoBehaviour:
     eres m\xE1s charlatana que yo\r\n"
   - Encima...
   interactAction: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  playerMovement: {fileID: 1715989314}
 --- !u!65 &1325130900
 BoxCollider:
   m_ObjectHideFlags: 0

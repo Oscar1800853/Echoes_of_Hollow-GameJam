@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 using TMPro;
 using UnityEngine.UI;
 
-public class DiaNivel1Inicio : MonoBehaviour
+public class DiaNivel1Final : MonoBehaviour
 {
     //UI References
     [SerializeField]
