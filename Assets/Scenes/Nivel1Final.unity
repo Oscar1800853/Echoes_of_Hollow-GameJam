@@ -27967,118 +27967,6 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
---- !u!1 &965725901
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 965725905}
-  - component: {fileID: 965725904}
-  - component: {fileID: 965725903}
-  - component: {fileID: 965725902}
-  m_Layer: 0
-  m_Name: carta
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!65 &965725902
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 965725901}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &965725903
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 965725901}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &965725904
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 965725901}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &965725905
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 965725901}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.77, y: 2.18, z: 197.03}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1033685129}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &986249705
 GameObject:
   m_ObjectHideFlags: 0
@@ -30311,12 +30199,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1033685128}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -5.77, y: 2.18, z: 197.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 965725905}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1033685130
 MonoBehaviour:
@@ -30333,9 +30221,30 @@ MonoBehaviour:
   dialogueCanvas: {fileID: 2146316612}
   speakerText: {fileID: 1401094027}
   dialogueText: {fileID: 2083722780}
-  speaker: []
-  dialogueWords: []
-  interactAction: {fileID: 0}
+  speaker:
+  - Nymeris
+  - Carta
+  - Nymeris
+  - Carta
+  - Carta
+  - Nymeris
+  - Carta
+  - Nymeris
+  dialogueWords:
+  - "\xBFQu\xE9 era esa cosa?"
+  - "Un murci\xE9lago, pero mutante. Son murci\xE9lagos con los que experimentaron
+    y spuestamente est\xE1n m\xE1s avanzados"
+  - "\xBFY para que han experimentado con ellos?"
+  - "\xBFPor seguridad..? Yo que s\xE9; bueno ahora vamos a entrar al poblado. Actua
+    como si fueras una m\xE1s del poblado si no quieres llamar la atenci\xF3n."
+  - " Si llamas la atenci\xF3n vendr\xE1n a por ti los guardias. No s\xE9 si te tendr\xE1s
+    que enfrentar a alguno m\xE1s adelante igualmente.\r\n"
+  - "Anda que vas a ayudar tu mucho eh\u2026\r\n"
+  - "Si prefieres te dejo aqu\xED sola y te las apa\xF1as t\xFA hacia d\xF3nde ir.\r\n"
+  - 'Vale vale ya me callo.
+
+'
+  interactAction: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!65 &1033685131
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -30355,8 +30264,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.8843117, y: 1, z: 2.848526}
-  m_Center: {x: 0.0671401, y: 0, z: -0.052497864}
+  m_Size: {x: 18.020172, y: 4.7491465, z: 1.1174774}
+  m_Center: {x: -0.17466545, y: 1.8745732, z: -0.91802216}
 --- !u!43 &1041230643
 Mesh:
   m_ObjectHideFlags: 0
@@ -56055,7 +55964,7 @@ SceneRoots:
   - {fileID: 1651146000}
   - {fileID: 2098726330}
   - {fileID: 557732100}
-  - {fileID: 965725905}
+  - {fileID: 1033685129}
   - {fileID: 2146316616}
   - {fileID: 198310302}
   - {fileID: 1888596898}

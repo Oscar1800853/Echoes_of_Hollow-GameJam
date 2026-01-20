@@ -1,9 +1,9 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using TMPro;
 using UnityEngine.UI;
 
-public class DiaNivel1Final : MonoBehaviour
+public class DiaNivel2Final : MonoBehaviour
 {
     //UI References
     [SerializeField]
@@ -78,7 +78,7 @@ public class DiaNivel1Final : MonoBehaviour
                 }
                 step += 1;
             }
-        
+
         }
     }
 
