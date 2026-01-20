@@ -10599,7 +10599,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2141299747}
   - component: {fileID: 2141299746}
-  - component: {fileID: 2141299745}
+  - component: {fileID: 2141299748}
   m_Layer: 0
   m_Name: DialogueHandler
   m_TagString: Untagged
@@ -10607,26 +10607,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2141299745
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2141299744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8895178403dc44543844561b4834954d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DiaNivel2Final
-  dialogueCanvas: {fileID: 1090868141}
-  speakerText: {fileID: 1651291543}
-  dialogueText: {fileID: 1695391558}
-  speaker:
-  - 
-  dialogueWords:
-  - 
-  interactAction: {fileID: 0}
 --- !u!65 &2141299746
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10663,6 +10643,49 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2141299748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2141299744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8895178403dc44543844561b4834954d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DiaNivel2Final
+  dialogueCanvas: {fileID: 1090868141}
+  speakerText: {fileID: 1651291543}
+  dialogueText: {fileID: 1695391558}
+  speaker:
+  - Nymeris
+  - Nymeris
+  - Carta
+  - Carta
+  - Nymeris
+  - Nymeris
+  - Carta
+  - Carta
+  - Carta
+  - Nymeris
+  dialogueWords:
+  - "\xBFNo se supon\xEDa que so no llamaba la atenci\xF3n no me atacar\xEDan los
+    guardias? \xBFY tu no decias que ten\xEDas magia?"
+  - "Me podr\xEDas haber ayudado con alguno, \xBFno? Sobre todo con esos guardias\u2026"
+  - "Bueno atacaste a los mutantes, as\xED que eso les alert\xF3. Adem\xE1s no dije
+    que tuviera magia, dije que estoy hecho de magia. Yo solo hago de gu\xEDa."
+  - "Como sea, ya casi hemos llegado, es ah\xED dentro."
+  - "\xBFY que hago? \xBFDejo que me ataquen? Si hombre\u2026"
+  - "\xBFEntonces es dentro del castillo?  Vamos, que te mand\xF3 el gobernador que
+    estaban diciendo los del poblado \xBFno?\r\n"
+  - "Puede ser. No s\xE9, \xE9l no puso quien era ni nada, simplemente me mand\xF3"
+  - "Y como dentro hay un bloqueador de magia para que simplemente el gobernador
+    pueda usarla, cuando entres me quedar\xE9 como una simple carta de tu mundo."
+  - "Pero supongo que ahora que lo dices\u2026 A lo mejor si fue el gobernador y
+    soy una carta de declaraci\xF3n."
+  - "Lo dudo\u2026"
+  interactAction: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
