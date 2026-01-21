@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Video;
@@ -37,15 +38,21 @@ public class AnimInicio : MonoBehaviour
     
     void Update()
     {
-        // Solo permitir saltar si no se ha mostrado la elección aún
+        // Saltar antes de la elección
         if(Input.GetKeyDown(KeyCode.Space) && !eleccionMostrada && !cinematicaCompletada)
         {
             StopAllCoroutines();
             SaltarAEleccion();
         }
-        
+
+        // Permitir saltar DESPUÉS de elegir "Seguir"(cuando el video se reanuda)
+        if (Input.GetKeyDown(KeyCode.Space) && cinematicaCompletada && debeCargarNivel)
+        {
+            CargarNivel();
+        }
+
         // Verificar continuamente si el video ha terminado cuando debe cargar el nivel
-        if(debeCargarNivel && videoPlayer != null)
+        if (debeCargarNivel && videoPlayer != null)
         {
             // Verificar si el video está cerca del final o ya terminó
             if(!videoPlayer.isPlaying || videoPlayer.time >= videoPlayer.length - 0.1f)
@@ -106,7 +113,8 @@ public class AnimInicio : MonoBehaviour
             Debug.Log($"Video reanudado. Tiempo actual: {videoPlayer.time}, Duración: {videoPlayer.length}");
         }
     }
-    
+
+ 
     public void ElegirFinalAlternativo()
     {
         cinematicaCompletada = true;
