@@ -30,6 +30,8 @@ public class Enemy : MonoBehaviour
     public float sightRange = 10f, attackRange = 2f;
     private bool playerInSightRange, playerInAttackRange;
 
+    Animator animator;
+
     private void Awake()
     {
         // Busca el jugador automáticamente si no está asignado
@@ -45,6 +47,8 @@ public class Enemy : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         if (agent == null)
             Debug.LogError("El Enemy necesita un NavMeshAgent. Agrega uno al GameObject.");
+        
+        animator = GetComponent<Animator>();
     }
 
     void Start()
@@ -86,6 +90,7 @@ public class Enemy : MonoBehaviour
         // Llegó al punto
         if (distanceToWalkPoint.magnitude < 1f)
             walkPointSet = false;
+        animator.SetFloat("moverse", 0.1f);
     }
 
     private void SearchWalkPoint()
@@ -105,12 +110,14 @@ public class Enemy : MonoBehaviour
     private void ChasePlayer()
     {
         agent.SetDestination(player.position);
+        animator.SetFloat("moverse", 0.1f);
     }
 
     private void AttackPlayer()
     {
         // El enemigo se queda quieto
         agent.SetDestination(transform.position);
+        animator.SetFloat("moverse", 0f);
 
         // Mira al jugador
         Vector3 lookPos = player.position;
@@ -126,6 +133,8 @@ public class Enemy : MonoBehaviour
     private IEnumerator AttackRoutine()
     {
         isAttacking = true;
+
+        animator.SetTrigger("atacar");
 
         Debug.Log("¡Ataca!");
         // Aquí pondrías la lógica de daño al jugador
