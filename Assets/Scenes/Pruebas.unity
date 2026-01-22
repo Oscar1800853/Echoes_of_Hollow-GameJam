@@ -1327,9 +1327,13 @@ MonoBehaviour:
     m_Bits: 64
   walkPoint: {x: 5, y: 5, z: 0}
   walkPointRange: 6
+  minIdleTime: 2
+  maxIdleTime: 3.1
+  idleChance: 0.4
   timeBetweenAttacks: 2
   sightRange: 6
   attackRange: 3
+  timeBeforeDying: 3
 --- !u!195 &1277895683
 NavMeshAgent:
   m_ObjectHideFlags: 0

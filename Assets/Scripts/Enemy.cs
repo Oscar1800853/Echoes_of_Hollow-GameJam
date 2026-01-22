@@ -22,6 +22,12 @@ public class Enemy : MonoBehaviour
     private bool walkPointSet;
     public float walkPointRange;
 
+    //pausa patrulla
+    private bool isIdling = false;
+    public float minIdleTime = 2f;
+    public float maxIdleTime = 5f;
+    public float idleChance = 0.4f;
+
     // Ataque
     public float timeBetweenAttacks = 8f;
     private bool isAttacking;
@@ -29,7 +35,7 @@ public class Enemy : MonoBehaviour
     // Estados
     public float sightRange = 10f, attackRange = 2f;
     private bool playerInSightRange, playerInAttackRange;
-    private float timeBeforeDying = 3f;
+    public float timeBeforeDying = 3f;
     private bool isDead;
 
     Animator animator;
@@ -81,9 +87,15 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    #region Patrullaje
+    //PATRULLA
     private void Patroling()
     {
+        if (isIdling)
+        {
+            animator.SetFloat("moverse", 0f);
+            return;
+        }
+        
         if (!walkPointSet) SearchWalkPoint();
 
         if (walkPointSet)
@@ -93,8 +105,31 @@ public class Enemy : MonoBehaviour
 
         // Llegó al punto
         if (distanceToWalkPoint.magnitude < 1f)
+        {
+
             walkPointSet = false;
+
+            if (Random.value <idleChance)
+            {
+                StartCoroutine(IdleRoutine());
+            }
+        }
+            
         animator.SetFloat("moverse", 0.1f);
+    }
+
+    private IEnumerator IdleRoutine()
+    {
+        isIdling = true;
+
+        //tiempo aleatorio de la idle
+        float idleTime = Random.Range(minIdleTime, maxIdleTime);
+
+        Debug.Log("Enemigo en pausa por" + "segundos");
+
+        yield return new WaitForSeconds(idleTime);
+
+        isIdling = false;
     }
 
     private void SearchWalkPoint()
@@ -108,9 +143,9 @@ public class Enemy : MonoBehaviour
         if (Physics.Raycast(walkPoint, Vector3.down, 2f, whatIsGround))
             walkPointSet = true;
     }
-    #endregion
+    
 
-    #region Persecución y Ataque
+    //SEGUIR JUGADOR
     private void ChasePlayer()
     {
         agent.SetDestination(player.position);
@@ -134,6 +169,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    //ATAQUE
     private IEnumerator AttackRoutine()
     {
         isAttacking = true;
@@ -147,9 +183,9 @@ public class Enemy : MonoBehaviour
 
         isAttacking = false;
     }
-    #endregion
+    
 
-    #region Daño y Muerte
+    
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
@@ -159,6 +195,7 @@ public class Enemy : MonoBehaviour
             Die();
     }
 
+    //MUERTE
     private void Die()
     {
         if (isDead) return;
@@ -177,7 +214,7 @@ public class Enemy : MonoBehaviour
 
         
     }
-    #endregion
+    
 
     private IEnumerator DyingCoroutine()
     {
@@ -199,4 +236,3 @@ public class Enemy : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 }
-
