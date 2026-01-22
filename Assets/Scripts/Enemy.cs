@@ -29,6 +29,8 @@ public class Enemy : MonoBehaviour
     // Estados
     public float sightRange = 10f, attackRange = 2f;
     private bool playerInSightRange, playerInAttackRange;
+    private float timeBeforeDying = 3f;
+    private bool isDead;
 
     Animator animator;
 
@@ -58,6 +60,8 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        if (isDead) return;
+        
         // Comprueba si el jugador está en rango
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
@@ -157,14 +161,33 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        if (isDead) return;
+        isDead = true;
+        
         Debug.Log(gameObject.name + " ha muerto.");
+
+        agent.enabled = false;
+
+        GetComponent<Collider>().enabled = false;
 
         /*if (deathEffect != null)
             Instantiate(deathEffect, transform.position, Quaternion.identity);*/
 
-        Destroy(gameObject);
+        StartCoroutine(DyingCoroutine());
+
+        
     }
     #endregion
+
+    private IEnumerator DyingCoroutine()
+    {
+        animator.SetTrigger("morirse");
+
+        yield return new WaitForSeconds(timeBeforeDying);
+
+        Destroy(gameObject);
+    }
+
 
     // Visualizar rangos en el editor
     private void OnDrawGizmosSelected()
