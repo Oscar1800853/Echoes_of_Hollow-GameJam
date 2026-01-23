@@ -243,15 +243,6 @@ public class Enemy : MonoBehaviour
 
         // CORRECCIÓN: Usar enemyPool en lugar de IObjectPool
         // Y NO destruir el GameObject, solo devolverlo al pool
-        if (enemyPool != null)
-        {
-            enemyPool.Release(this);
-        }
-        else
-        {
-            Debug.LogError("El pool no está asignado en este enemigo.");
-            Destroy(gameObject);
-        }
     }
 
     // Visualizar rangos en el editor
