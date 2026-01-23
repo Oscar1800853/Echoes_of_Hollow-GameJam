@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Pool;
 
 public class Enemy : MonoBehaviour
 {
@@ -16,6 +17,12 @@ public class Enemy : MonoBehaviour
     public Transform player;
     public LayerMask whatIsGround;
     public LayerMask whatIsPlayer;
+    private IObjectPool<Enemy> enemyPool;
+
+    public void SetPool(IObjectPool<Enemy> pool)
+    {
+        enemyPool = pool;
+    }
 
     // Patrulla
     public Vector3 walkPoint;
@@ -55,7 +62,7 @@ public class Enemy : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         if (agent == null)
             Debug.LogError("El Enemy necesita un NavMeshAgent. Agrega uno al GameObject.");
-        
+
         animator = GetComponent<Animator>();
     }
 
@@ -64,10 +71,30 @@ public class Enemy : MonoBehaviour
         currentHealth = maxHealth;
     }
 
+    // Método para resetear el enemigo cuando vuelve del pool
+    public void ResetEnemy()
+    {
+        currentHealth = maxHealth;
+        isDead = false;
+        isAttacking = false;
+        isIdling = false;
+        walkPointSet = false;
+
+        // Reactivar componentes
+        agent.enabled = true;
+        GetComponent<Collider>().enabled = true;
+
+        // Resetear animador si es necesario
+        if (animator != null)
+        {
+            animator.SetFloat("moverse", 0f);
+        }
+    }
+
     private void Update()
     {
         if (isDead) return;
-        
+
         // Comprueba si el jugador está en rango
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
@@ -95,7 +122,7 @@ public class Enemy : MonoBehaviour
             animator.SetFloat("moverse", 0f);
             return;
         }
-        
+
         if (!walkPointSet) SearchWalkPoint();
 
         if (walkPointSet)
@@ -106,15 +133,14 @@ public class Enemy : MonoBehaviour
         // Llegó al punto
         if (distanceToWalkPoint.magnitude < 1f)
         {
-
             walkPointSet = false;
 
-            if (Random.value <idleChance)
+            if (Random.value < idleChance)
             {
                 StartCoroutine(IdleRoutine());
             }
         }
-            
+
         animator.SetFloat("moverse", 0.1f);
     }
 
@@ -125,7 +151,7 @@ public class Enemy : MonoBehaviour
         //tiempo aleatorio de la idle
         float idleTime = Random.Range(minIdleTime, maxIdleTime);
 
-        Debug.Log("Enemigo en pausa por" + "segundos");
+        Debug.Log("Enemigo en pausa por " + idleTime + " segundos");
 
         yield return new WaitForSeconds(idleTime);
 
@@ -143,7 +169,6 @@ public class Enemy : MonoBehaviour
         if (Physics.Raycast(walkPoint, Vector3.down, 2f, whatIsGround))
             walkPointSet = true;
     }
-    
 
     //SEGUIR JUGADOR
     private void ChasePlayer()
@@ -183,9 +208,7 @@ public class Enemy : MonoBehaviour
 
         isAttacking = false;
     }
-    
 
-    
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
@@ -200,21 +223,17 @@ public class Enemy : MonoBehaviour
     {
         if (isDead) return;
         isDead = true;
-        
+
         Debug.Log(gameObject.name + " ha muerto.");
 
         agent.enabled = false;
-
         GetComponent<Collider>().enabled = false;
 
         /*if (deathEffect != null)
             Instantiate(deathEffect, transform.position, Quaternion.identity);*/
 
         StartCoroutine(DyingCoroutine());
-
-        
     }
-    
 
     private IEnumerator DyingCoroutine()
     {
@@ -222,9 +241,18 @@ public class Enemy : MonoBehaviour
 
         yield return new WaitForSeconds(timeBeforeDying);
 
-        Destroy(gameObject);
+        // CORRECCIÓN: Usar enemyPool en lugar de IObjectPool
+        // Y NO destruir el GameObject, solo devolverlo al pool
+        if (enemyPool != null)
+        {
+            enemyPool.Release(this);
+        }
+        else
+        {
+            Debug.LogError("El pool no está asignado en este enemigo.");
+            Destroy(gameObject);
+        }
     }
-
 
     // Visualizar rangos en el editor
     private void OnDrawGizmosSelected()
