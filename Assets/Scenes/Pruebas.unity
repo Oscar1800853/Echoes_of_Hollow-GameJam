@@ -538,7 +538,7 @@ MonoBehaviour:
   minIdleTime: 7
   maxIdleTime: 9
   idleChance: 0.4
-  timeBetweenAttacks: 8
+  timeBetweenAttacks: 4.6
   sightRange: 6.99
   attackRange: 4.66
   timeBeforeDying: 4
