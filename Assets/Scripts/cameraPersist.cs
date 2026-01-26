@@ -22,11 +22,14 @@ public class CameraPersist : MonoBehaviour
 
         instance = this;
         DontDestroyOnLoad(gameObject);
+    }
 
+    void OnEnable()
+    {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    void OnDestroy()
+    void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
@@ -39,6 +42,11 @@ public class CameraPersist : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         VerificarEscenaActual();
+
+        if (!EsEscenaDeJuego(scene.name))
+        {
+            ResetCamera();
+        }
     }
 
     void VerificarEscenaActual()
@@ -55,6 +63,21 @@ public class CameraPersist : MonoBehaviour
             if (vcam != null)
                 vcam.Follow = null;
         }
+    }
+
+    private bool EsEscenaDeJuego(string nombreEscena)
+    {
+        return nombreEscena.Contains("Nivel") || nombreEscena == escenaActivacion;
+    }
+
+    public void ResetCamera()
+    {
+        seguimientoActivo = false;
+        if (vcam != null)
+        {
+            vcam.Follow = null;
+        }
+        Debug.Log("[CameraPersist] Cámara reseteada");
     }
 
     void AsignarJugador()

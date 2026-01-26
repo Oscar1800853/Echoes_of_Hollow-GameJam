@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Pool;
@@ -37,6 +38,7 @@ public class Enemy : MonoBehaviour
 
     // Ataque
     public float timeBetweenAttacks = 8f;
+    public float damageAmount = 10f;
     private bool isAttacking;
 
     // Estados
@@ -202,7 +204,15 @@ public class Enemy : MonoBehaviour
         animator.SetTrigger("atacar");
 
         Debug.Log("¡Ataca!");
-        // Aquí pondrías la lógica de daño al jugador
+
+        if (player != null)
+        {
+            PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(damageAmount);
+            }
+        }
 
         yield return new WaitForSeconds(timeBetweenAttacks);
 

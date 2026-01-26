@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -7,15 +8,22 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private float maxHealth = 100f;
     [SerializeField] private float currentHealth;
 
-    [Header("Daño por contacto (temporal para pruebas)")]
-    [SerializeField] private float damagePerContact = 10f;
-    [SerializeField] private float damageCooldown = 1f; // Tiempo entre daños
+    [Header("Configuración de muerte")]
+    [SerializeField] private float timeBeforeMenu = 3f;
+    [SerializeField] private string menuSceneName = "menu";
     
     private float lastDamageTime = -999f;
 
     public static PlayerHealth instance;
 
     private PlayerHealthBar healthBarCache;
+
+    private bool isDead = false;
+ // Métodos públicos para acceder a la vida desde otros scripts
+    public float GetCurrentHealth() => currentHealth;
+    public float GetMaxHealth() => maxHealth;
+    public float GetHealthPercentage() => currentHealth / maxHealth;
+
 
     void Awake()
     {
@@ -26,6 +34,7 @@ public class PlayerHealth : MonoBehaviour
             return;
         }
         instance = this;
+        DontDestroyOnLoad(gameObject);
         
         // Si es la primera vez, inicializar la vida
         if (currentHealth == 0)
@@ -40,32 +49,8 @@ public class PlayerHealth : MonoBehaviour
         healthBarCache = FindFirstObjectByType<PlayerHealthBar>();
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        // Detectar colisión con enemigos
-        if (other.CompareTag("enemy"))
-        {
-            TakeDamage(damagePerContact);
-        }
-    }
-
-    void OnTriggerStay(Collider other)
-    {
-        // Daño continuo mientras está en contacto con el enemigo
-        if (other.CompareTag("enemy"))
-        {
-            if (Time.time >= lastDamageTime + damageCooldown)
-            {
-                TakeDamage(damagePerContact);
-            }
-        }
-    }
-
     public void TakeDamage(float damage)
     {
-        if (Time.time < lastDamageTime + damageCooldown)
-            return;
-
         currentHealth -= damage;
         lastDamageTime = Time.time;
 
@@ -94,26 +79,31 @@ public class PlayerHealth : MonoBehaviour
 
     void Die()
     {
+        if (isDead) return;
+        isDead = true;
+        
         Debug.Log("[PlayerHealth] ¡El jugador ha muerto!");
-        
-        // Aquí puedes añadir lógica de muerte (reiniciar nivel, game over, etc.)
-        // Por ahora solo reiniciamos la vida para pruebas
-        currentHealth = maxHealth;
-        
-        // Ejemplo: recargar la escena actual
-        // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        StartCoroutine(DeathRoutine());
+       
     }
-
-    // Métodos públicos para acceder a la vida desde otros scripts
-    public float GetCurrentHealth() => currentHealth;
-    public float GetMaxHealth() => maxHealth;
-    public float GetHealthPercentage() => currentHealth / maxHealth;
-
-    // Para resetear la vida (útil para testing)
-    public void ResetHealth()
+   
+    private IEnumerator DeathRoutine()
     {
-        currentHealth = maxHealth;
-        Debug.Log("[PlayerHealth] Vida reseteada al máximo");
+        yield return new WaitForSeconds(timeBeforeMenu);
+
+        Debug.Log("[PlayerHealth] volviendo al menú...");
+        
+        if (instance == this)
+        {
+            instance = null;
+        }
+
+        Destroy(gameObject);
+
+        SceneManager.LoadScene(menuSceneName);
+
+
     }
 
     // Gizmo para visualizar el estado de vida en el editor
