@@ -22,8 +22,7 @@ public class PlayerHealthBar : MonoBehaviour
 
     }
 
-   
-    public void SetValue (int newValue)
+    public void SetValue(float newValue)
     {
         var targetWidth = newValue * _maxRightMask / _playerHealth.GetMaxHealth();
         var newRightMask = _maxRightMask + _initialRightMask - targetWidth;
@@ -31,10 +30,12 @@ public class PlayerHealthBar : MonoBehaviour
         padding.z = newRightMask;
         _mask.padding = padding;
     }
-    
-    // Update is called once per frame
+
     void Update()
     {
-        
+        if (_playerHealth != null)
+        {
+            SetValue(_playerHealth.GetCurrentHealth());
+        }
     }
 }

@@ -15,6 +15,8 @@ public class PlayerHealth : MonoBehaviour
 
     public static PlayerHealth instance;
 
+    private PlayerHealthBar healthBarCache;
+
     void Awake()
     {
         // Singleton: mantener la vida persistente entre escenas
@@ -35,6 +37,7 @@ public class PlayerHealth : MonoBehaviour
     void Start()
     {
         Debug.Log($"[PlayerHealth] Vida actual: {currentHealth}/{maxHealth}");
+        healthBarCache = FindFirstObjectByType<PlayerHealthBar>();
     }
 
     void OnTriggerEnter(Collider other)
@@ -68,12 +71,21 @@ public class PlayerHealth : MonoBehaviour
 
         Debug.Log($"[PlayerHealth] ¡Recibió {damage} de daño! Vida restante: {currentHealth}/{maxHealth}");
 
+        UpdateHealthUI();
+
         if (currentHealth <= 0)
         {
             Die();
         }
     }
 
+    private void UpdateHealthUI()
+    {
+        if (healthBarCache != null)
+        {
+            healthBarCache.SetValue(currentHealth);
+        }
+    }
     public void Heal(float amount)
     {
         currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
