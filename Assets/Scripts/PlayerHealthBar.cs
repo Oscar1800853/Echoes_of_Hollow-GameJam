@@ -17,17 +17,18 @@ public class PlayerHealthBar : MonoBehaviour
     void Start()
     {
         // x = left, w = top, y = bottom, z = right
-        _maxRightMask = _barRect.rect.width - _mask.padding.x - _mask.padding.z;
+        _maxRightMask = _barRect.rect.width;
         _initialRightMask = _mask.padding.z;
 
     }
 
     public void SetValue(float newValue)
     {
-        var targetWidth = newValue * _maxRightMask / _playerHealth.GetMaxHealth();
-        var newRightMask = _maxRightMask + _initialRightMask - targetWidth;
+        // Calcular el porcentaje de vida actual
+        float healthPercentage = newValue / _playerHealth.GetMaxHealth();
+
         var padding = _mask.padding;
-        padding.z = newRightMask;
+        padding.z = _maxRightMask * (1f - healthPercentage);
         _mask.padding = padding;
     }
 

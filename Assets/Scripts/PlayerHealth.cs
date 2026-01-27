@@ -11,19 +11,17 @@ public class PlayerHealth : MonoBehaviour
     [Header("Configuración de muerte")]
     [SerializeField] private float timeBeforeMenu = 3f;
     [SerializeField] private string menuSceneName = "menu";
-    
+
     private float lastDamageTime = -999f;
-
     public static PlayerHealth instance;
-
     private PlayerHealthBar healthBarCache;
-
+    private HealthBarFlowers flowersBarCache; // Nueva referencia
     private bool isDead = false;
- // Métodos públicos para acceder a la vida desde otros scripts
+
+    // Métodos públicos para acceder a la vida desde otros scripts
     public float GetCurrentHealth() => currentHealth;
     public float GetMaxHealth() => maxHealth;
     public float GetHealthPercentage() => currentHealth / maxHealth;
-
 
     void Awake()
     {
@@ -35,7 +33,7 @@ public class PlayerHealth : MonoBehaviour
         }
         instance = this;
         DontDestroyOnLoad(gameObject);
-        
+
         // Si es la primera vez, inicializar la vida
         if (currentHealth == 0)
         {
@@ -46,14 +44,25 @@ public class PlayerHealth : MonoBehaviour
     void Start()
     {
         Debug.Log($"[PlayerHealth] Vida actual: {currentHealth}/{maxHealth}");
+        CacheHealthBars();
+    }
+
+    // Cachear ambas barras de vida
+    private void CacheHealthBars()
+    {
         healthBarCache = FindFirstObjectByType<PlayerHealthBar>();
+        flowersBarCache = FindFirstObjectByType<HealthBarFlowers>();
+
+        // Actualizar ambas barras al inicio
+        UpdateHealthUI();
     }
 
     public void TakeDamage(float damage)
     {
+        if (isDead) return;
+
         currentHealth -= damage;
         lastDamageTime = Time.time;
-
         Debug.Log($"[PlayerHealth] ¡Recibió {damage} de daño! Vida restante: {currentHealth}/{maxHealth}");
 
         UpdateHealthUI();
@@ -66,52 +75,71 @@ public class PlayerHealth : MonoBehaviour
 
     private void UpdateHealthUI()
     {
+        // Actualizar la barra antigua
         if (healthBarCache != null)
         {
             healthBarCache.SetValue(currentHealth);
         }
+
+        // Actualizar la barra de flores
+        if (flowersBarCache != null)
+        {
+            flowersBarCache.UpdateBar();
+        }
     }
+
     public void Heal(float amount)
     {
+        if (isDead) return;
+
         currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
         Debug.Log($"[PlayerHealth] Curado {amount}. Vida actual: {currentHealth}/{maxHealth}");
+
+        UpdateHealthUI();
     }
 
     void Die()
     {
         if (isDead) return;
         isDead = true;
-        
-        Debug.Log("[PlayerHealth] ¡El jugador ha muerto!");
 
+        Debug.Log("[PlayerHealth] ¡El jugador ha muerto!");
         StartCoroutine(DeathRoutine());
-       
     }
-   
+
     private IEnumerator DeathRoutine()
     {
         yield return new WaitForSeconds(timeBeforeMenu);
-
         Debug.Log("[PlayerHealth] volviendo al menú...");
-        
+
         if (instance == this)
         {
             instance = null;
         }
-
         Destroy(gameObject);
-
         SceneManager.LoadScene(menuSceneName);
-
-
     }
 
-    // Gizmo para visualizar el estado de vida en el editor
+    // Llamar esto cuando cambies de escena para reconectar las barras
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        CacheHealthBars();
+    }
+
     void OnDrawGizmos()
     {
         if (Application.isPlaying)
         {
-            // Verde si tiene más del 50% de vida, amarillo si está entre 25-50%, rojo si menos del 25%
             if (currentHealth / maxHealth > 0.5f)
                 Gizmos.color = Color.green;
             else if (currentHealth / maxHealth > 0.25f)
