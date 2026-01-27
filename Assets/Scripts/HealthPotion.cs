@@ -2,15 +2,22 @@ using UnityEngine;
 
 public class HealthPotion : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [Header("Configuración de la poción")]
+    [SerializeField] private float healAmount = 25f;
+    [SerializeField] private bool destroyOnUse = true;
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if (!other.CompareTag("Player")) return;
+
+        if (PlayerHealth.instance != null)
+        {
+            PlayerHealth.instance.Heal(healAmount);
+        }
+
+        if (destroyOnUse)
+        {
+            Destroy(gameObject);
+        }
     }
 }

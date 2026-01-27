@@ -4,11 +4,11 @@ using UnityEngine.UI;
 public class HealthBarFlowers : MonoBehaviour
 {
     [SerializeField] private PlayerHealth playerHealth;
-    [SerializeField] private Image[] flowers; // 5 imágenes
+    [SerializeField] private Image[] flowers; // 5 imagenes
 
     void Start()
     {
-        // Buscar el PlayerHealth si no está asignado
+        // Buscar el PlayerHealth si no esta asignado
         if (playerHealth == null)
         {
             playerHealth = PlayerHealth.instance;
