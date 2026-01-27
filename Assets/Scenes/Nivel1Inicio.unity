@@ -42176,7 +42176,7 @@ MonoBehaviour:
   comboResetTime: 1
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 128
   attackOrigin: {fileID: 0}
 --- !u!114 &1715989314
 MonoBehaviour:

@@ -125,9 +125,10 @@ public class Enemy : MonoBehaviour
             return;
         }
 
-        agent.isStopped = false; // Asegúrate de que esté activo
-
         if (!walkPointSet) SearchWalkPoint();
+
+        if (walkPointSet)
+            agent.SetDestination(walkPoint);
 
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
 
@@ -174,17 +175,14 @@ public class Enemy : MonoBehaviour
     //SEGUIR JUGADOR
     private void ChasePlayer()
     {
-        agent.isStopped = false; // Reactiva el movimiento
         agent.SetDestination(player.position);
         animator.SetFloat("moverse", 0.1f);
     }
 
     private void AttackPlayer()
     {
-        // Detener el agente completamente
-        agent.isStopped = true;
-        agent.velocity = Vector3.zero;
-
+        // El enemigo se queda quieto
+        agent.SetDestination(transform.position);
         animator.SetFloat("moverse", 0f);
 
         // Mira al jugador

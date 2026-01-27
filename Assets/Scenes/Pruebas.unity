@@ -1886,8 +1886,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a8aac98e987a3e4ab8be72c304de5fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
-  maxHealth: 2000
-  currentHealth: 2000
+  maxHealth: 600
+  currentHealth: 600
   timeBeforeMenu: 3
   menuSceneName: menu
 --- !u!1 &720151252
@@ -3977,6 +3977,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 665831980}
+    - target: {fileID: 1556391313456030773, guid: 483398fff3496ae40bf97e1cfdaba40f, type: 3}
+      propertyPath: timeBeforeDying
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4975377558865225325, guid: 483398fff3496ae40bf97e1cfdaba40f, type: 3}
       propertyPath: m_Name
       value: mutante
