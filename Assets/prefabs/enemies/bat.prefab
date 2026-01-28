@@ -248,7 +248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a8a9fe51723bda45b3faee1601b7a38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  maxHealth: 20
+  maxHealth: 15
   agent: {fileID: 1938510453181558667}
   player: {fileID: 0}
   whatIsGround:
@@ -263,7 +263,7 @@ MonoBehaviour:
   maxIdleTime: 3.05
   idleChance: 0.4
   timeBetweenAttacks: 2
-  damageAmount: 20
+  damageAmount: 10
   sightRange: 6
   attackRange: 3
   timeBeforeDying: 2.8
