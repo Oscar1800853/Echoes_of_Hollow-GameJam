@@ -1030,6 +1030,72 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
+--- !u!1001 &527411936
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3940196484146545740, guid: 307e74a8c08006c44a34cec90607b12d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 76.02721
+      objectReference: {fileID: 0}
+    - target: {fileID: 3940196484146545740, guid: 307e74a8c08006c44a34cec90607b12d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.68
+      objectReference: {fileID: 0}
+    - target: {fileID: 3940196484146545740, guid: 307e74a8c08006c44a34cec90607b12d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 323.02826
+      objectReference: {fileID: 0}
+    - target: {fileID: 3940196484146545740, guid: 307e74a8c08006c44a34cec90607b12d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071067
+      objectReference: {fileID: 0}
+    - target: {fileID: 3940196484146545740, guid: 307e74a8c08006c44a34cec90607b12d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 3940196484146545740, guid: 307e74a8c08006c44a34cec90607b12d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3940196484146545740, guid: 307e74a8c08006c44a34cec90607b12d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3940196484146545740, guid: 307e74a8c08006c44a34cec90607b12d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3940196484146545740, guid: 307e74a8c08006c44a34cec90607b12d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3940196484146545740, guid: 307e74a8c08006c44a34cec90607b12d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4460168364500459254, guid: 307e74a8c08006c44a34cec90607b12d, type: 3}
+      propertyPath: m_Name
+      value: Pocion_de_vida
+      objectReference: {fileID: 0}
+    - target: {fileID: 4460168364500459254, guid: 307e74a8c08006c44a34cec90607b12d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 307e74a8c08006c44a34cec90607b12d, type: 3}
+--- !u!1 &527411937 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4460168364500459254, guid: 307e74a8c08006c44a34cec90607b12d, type: 3}
+  m_PrefabInstance: {fileID: 527411936}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &547075799
 GameObject:
   m_ObjectHideFlags: 0
@@ -1604,6 +1670,7 @@ MonoBehaviour:
   doorAnimators:
   - {fileID: 1670782020}
   - {fileID: 2082171775}
+  healthPotion: {fileID: 527411937}
 --- !u!4 &674163127
 Transform:
   m_ObjectHideFlags: 0
@@ -3887,3 +3954,4 @@ SceneRoots:
   - {fileID: 607285196}
   - {fileID: 408121291}
   - {fileID: 674163127}
+  - {fileID: 527411936}
