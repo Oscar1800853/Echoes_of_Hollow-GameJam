@@ -49,6 +49,8 @@ public class Enemy : MonoBehaviour
 
     Animator animator;
 
+    private LevelDoorManager doorManager;
+    
     private void Awake()
     {
         // Busca el jugador automáticamente si no está asignado
@@ -66,11 +68,17 @@ public class Enemy : MonoBehaviour
             Debug.LogError("El Enemy necesita un NavMeshAgent. Agrega uno al GameObject.");
 
         animator = GetComponent<Animator>();
+
+        
+
+
     }
 
     void Start()
     {
         currentHealth = maxHealth;
+
+        doorManager = FindFirstObjectByType<LevelDoorManager>();
     }
 
     // Método para resetear el enemigo cuando vuelve del pool
@@ -243,6 +251,10 @@ public class Enemy : MonoBehaviour
             Instantiate(deathEffect, transform.position, Quaternion.identity);*/
 
         StartCoroutine(DyingCoroutine());
+
+        doorManager.EnemyDefeated();
+
+       
     }
 
     private IEnumerator DyingCoroutine()
@@ -250,6 +262,8 @@ public class Enemy : MonoBehaviour
         animator.SetTrigger("morirse");
 
         yield return new WaitForSeconds(timeBeforeDying);
+
+        Destroy(gameObject);
 
         // CORRECCIÓN: Usar enemyPool en lugar de IObjectPool
         // Y NO destruir el GameObject, solo devolverlo al pool
