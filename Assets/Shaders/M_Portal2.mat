@@ -49,9 +49,9 @@ Material:
     - _radial_noise: 11
     - _radial_speed: 0.37
     m_Colors:
-    - _emessive_color: {r: 0.9245283, g: 0.117746465, b: 0.8580673, a: 1}
-    - _portal_color: {r: 0.2811499, g: 0.5897687, b: 0.735849, a: 1}
-    - _void_color: {r: 0.3762655, g: 0.2355375, b: 0.745283, a: 1}
+    - _emessive_color: {r: 0.3563546, g: 0.64271265, b: 0.8301887, a: 1}
+    - _portal_color: {r: 0.18422928, g: 0.24111287, b: 0.8679245, a: 1}
+    - _void_color: {r: 0.38781595, g: 0.3931594, b: 0.7830189, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &4380976810561173383
