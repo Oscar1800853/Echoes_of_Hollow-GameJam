@@ -55,16 +55,21 @@ public class DialogoNPC1 : MonoBehaviour
 
     void Update()
     {
-        if (interactAction != null && interactAction.action.WasPressedThisFrame() && dialogueActivated)
+        if (interactAction != null && interactAction.action.WasPressedThisFrame() && dialogueActivated && dialogueStarted)
         {
-            // Primera vez que presiona: detener al jugador y mostrar diálogo
-            if (!dialogueStarted)
+            // Primera vez que presiona: detener al jugador y mostrar dialogo
+            if (step >= speaker.Length)
             {
-                dialogueStarted = true;
-                PauseGame();
-                dialogueCanvas.SetActive(true);
-
-                // Mostrar el primer diálogo
+                dialogueCanvas.SetActive(false);
+                step = 0;
+                dialogueCompleted = true;
+                dialogueStarted = false;
+                ResumeGame();
+            }
+            // Siguientes presiones: avanzar el dialogo
+            else
+            {
+                // Validacion para evitar errores de indice
                 if (step < speaker.Length && step < dialogueWords.Length)
                 {
                     speakerText.text = speaker[step];
@@ -72,28 +77,7 @@ public class DialogoNPC1 : MonoBehaviour
                 }
                 step += 1;
             }
-            // Siguientes presiones: avanzar el diálogo
-            else
-            {
-                if (step >= speaker.Length)
-                {
-                    dialogueCanvas.SetActive(false);
-                    step = 0;
-                    dialogueCompleted = true;
-                    dialogueStarted = false;
-                    ResumeGame();
-                }
-                else
-                {
-                    // Validación para evitar errores de índice
-                    if (step < speaker.Length && step < dialogueWords.Length)
-                    {
-                        speakerText.text = speaker[step];
-                        dialogueText.text = dialogueWords[step];
-                    }
-                    step += 1;
-                }
-            }
+
         }
     }
 
@@ -111,6 +95,18 @@ public class DialogoNPC1 : MonoBehaviour
         if (other.CompareTag("Player") && !dialogueCompleted)
         {
             dialogueActivated = true;
+            dialogueStarted = true;
+
+            PauseGame();
+            dialogueCanvas.SetActive(true);
+
+            // Mostrar el primer diï¿½logo
+            if (step < speaker.Length && step < dialogueWords.Length)
+            {
+                speakerText.text = speaker[step];
+                dialogueText.text = dialogueWords[step];
+            }
+            step += 1;
         }
     }
 
@@ -136,3 +132,4 @@ public class DialogoNPC1 : MonoBehaviour
     }
 
 }
+
