@@ -7,7 +7,7 @@ public class PlayerScript : MonoBehaviour
     public static PlayerScript instance;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         if (instance !=null)
         {
