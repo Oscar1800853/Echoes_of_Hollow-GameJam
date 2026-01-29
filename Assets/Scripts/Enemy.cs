@@ -40,6 +40,7 @@ public class Enemy : MonoBehaviour
     public float timeBetweenAttacks = 8f;
     public float damageAmount = 10f;
     private bool isAttacking;
+    public float attackDelay;
 
     // Estados
     public float sightRange = 10f, attackRange = 2f;
@@ -211,9 +212,11 @@ public class Enemy : MonoBehaviour
 
         animator.SetTrigger("atacar");
 
+        yield return new WaitForSeconds(attackDelay);
+
         Debug.Log("¡Ataca!");
 
-        if (player != null)
+        if (player != null && Vector3.Distance(transform.position, player.position) <= attackRange)
         {
             PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
             if (playerHealth != null)

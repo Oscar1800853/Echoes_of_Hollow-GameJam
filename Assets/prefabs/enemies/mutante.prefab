@@ -291,6 +291,7 @@ MonoBehaviour:
   idleChance: 0.4
   timeBetweenAttacks: 4.6
   damageAmount: 30
+  attackDelay: 2.5
   sightRange: 6.99
   attackRange: 4.66
   timeBeforeDying: 4
