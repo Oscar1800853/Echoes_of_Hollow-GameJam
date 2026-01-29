@@ -294,7 +294,7 @@ MonoBehaviour:
   attackDelay: 2.5
   sightRange: 6.99
   attackRange: 4.66
-  timeBeforeDying: 4
+  timeBeforeDying: 7
 --- !u!136 &7692467295850622808
 CapsuleCollider:
   m_ObjectHideFlags: 0
