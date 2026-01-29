@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(Animator))]
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movimiento")]
@@ -17,11 +18,16 @@ public class PlayerMovement : MonoBehaviour
     [Header("Rotación")]
     public Camera mainCamera;
 
+    [Header("Animación")]
+    [Tooltip("Velocidad de transición del blend tree (mayor = más suave)")]
+    public float animationSmoothTime = 0.1f;
+
     [HideInInspector]
     public bool canMove = true; // Bloquea movimiento temporalmente
 
     private CharacterController controller;
     private PlayerInput playerInput;
+    private Animator animator;
 
     private Vector2 moveInput;
     private Vector3 moveDirection;
@@ -34,6 +40,10 @@ public class PlayerMovement : MonoBehaviour
     private InputAction dashAction;
 
     private static PlayerMovement instance;
+
+    // Variables para suavizar las animaciones
+    private float currentSpeed;
+    private float speedVelocity;
 
     void Awake()
     {
@@ -48,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
 
         controller = GetComponent<CharacterController>();
         playerInput = GetComponent<PlayerInput>();
+        animator = GetComponent<Animator>();
 
         if (mainCamera == null)
             mainCamera = Camera.main;
@@ -114,14 +125,26 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (!canMove) return;
+        if (!canMove)
+        {
+            UpdateAnimator(0f);
+            return;
+        }
 
         if (isDashing)
         {
             controller.Move(moveDirection * dashSpeed * Time.deltaTime);
             dashTime += Time.deltaTime;
+            
+            // Actualizar animación de dash
+            UpdateAnimator(1.5f); // Velocidad alta para dash
+            animator.SetBool("IsDashing", true);
+            
             if (dashTime >= dashDuration)
+            {
                 isDashing = false;
+                animator.SetBool("IsDashing", false);
+            }
             return;
         }
 
@@ -146,7 +169,25 @@ public class PlayerMovement : MonoBehaviour
         moveDirection = inputDir;
         controller.Move(moveDirection * speed * Time.deltaTime);
 
+        // Actualizar animación de movimiento
+        float targetSpeed = moveDirection.magnitude;
+        UpdateAnimator(targetSpeed);
+
         RotateTowardsMouse();
+    }
+
+    void UpdateAnimator(float targetSpeed)
+    {
+        if (animator == null) return;
+
+        // Suavizar el cambio de velocidad para transiciones más fluidas
+        currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref speedVelocity, animationSmoothTime);
+        
+        // Actualizar el parámetro Speed del Blend Tree
+        animator.SetFloat("Speed", currentSpeed);
+        
+        // Actualizar parámetro booleano para saber si está en movimiento
+        animator.SetBool("IsMoving", currentSpeed > 0.01f);
     }
 
     void OnMove(InputAction.CallbackContext context)
@@ -193,4 +234,6 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public Vector3 GetMoveDirection() => moveDirection;
+    
+    public Animator GetAnimator() => animator;
 }

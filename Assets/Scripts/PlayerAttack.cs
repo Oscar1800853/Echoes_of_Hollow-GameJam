@@ -8,9 +8,9 @@ public class PlayerAttack : MonoBehaviour
     [Header("Combos de ataque")]
     public List<ComboAttack> comboList = new List<ComboAttack>()
     {
-        new ComboAttack() { nombre = "Corte rápido", damage = 15, range = 2f, angle = 60f, duration = 0.4f },
-        new ComboAttack() { nombre = "Estocada", damage = 25, range = 2.5f, angle = 45f, duration = 0.6f },
-        new ComboAttack() { nombre = "Golpe final", damage = 40, range = 3f, angle = 90f, duration = 0.8f }
+        new ComboAttack() { nombre = "Corte rápido", damage = 15, range = 2f, angle = 60f, duration = 0.4f, animationTrigger = "Attack1" },
+        new ComboAttack() { nombre = "Estocada", damage = 25, range = 2.5f, angle = 45f, duration = 0.6f, animationTrigger = "Attack2" },
+        new ComboAttack() { nombre = "Golpe final", damage = 40, range = 3f, angle = 90f, duration = 0.8f, animationTrigger = "Attack3" }
     };
 
     [Header("Ajustes generales")]
@@ -19,20 +19,32 @@ public class PlayerAttack : MonoBehaviour
     [Tooltip("Origen del ataque (por ejemplo punta de espada). Si es null se usa el transform del jugador.")]
     public Transform attackOrigin;
 
+    [Header("Animación de ataque")]
+    [Tooltip("Momento en el que se ejecuta el daño (0-1, donde 0.5 = mitad de la animación)")]
+    [Range(0f, 1f)]
+    public float damagePoint = 0.5f;
+
     private int comboIndex = 0;
     private bool isAttacking = false;
     private float lastAttackTime;
     private PlayerMovement movement;
+    private Animator animator;
 
     void Start()
     {
         movement = GetComponent<PlayerMovement>();
+        animator = movement.GetAnimator();
         if (attackOrigin == null) attackOrigin = transform;
     }
 
     void Update()
     {
-        if (Time.time - lastAttackTime > comboResetTime) comboIndex = 0;
+        if (Time.time - lastAttackTime > comboResetTime)
+        {
+            comboIndex = 0;
+            if (animator != null)
+                animator.SetInteger("ComboIndex", 0);
+        }
 
         if (Input.GetMouseButtonDown(0) && !isAttacking)
             StartCoroutine(PerformAttack());
@@ -48,11 +60,40 @@ public class PlayerAttack : MonoBehaviour
 
         isAttacking = true;
         ComboAttack currentAttack = comboList[comboIndex];
-        Debug.Log("Ataque {comboIndex + 1}: {currentAttack.nombre} | Daño {currentAttack.damage}");
+        Debug.Log($"Ataque {comboIndex + 1}: {currentAttack.nombre} | Daño {currentAttack.damage}");
 
+        // Bloquear movimiento durante el ataque (opcional)
+        if (movement != null)
+            movement.canMove = false;
+
+        // Activar animación de ataque
+        if (animator != null)
+        {
+            animator.SetBool("IsAttacking", true);
+            animator.SetInteger("ComboIndex", comboIndex);
+            
+            // Trigger específico del ataque
+            if (!string.IsNullOrEmpty(currentAttack.animationTrigger))
+                animator.SetTrigger(currentAttack.animationTrigger);
+        }
+
+        // Esperar hasta el punto de daño en la animación
+        float damageTime = currentAttack.duration * damagePoint;
+        yield return new WaitForSeconds(damageTime);
+
+        // Ejecutar el daño
         ExecuteAttack(currentAttack);
 
-        yield return new WaitForSeconds(currentAttack.duration);
+        // Esperar el resto de la duración
+        yield return new WaitForSeconds(currentAttack.duration - damageTime);
+
+        // Resetear estado de ataque
+        if (animator != null)
+            animator.SetBool("IsAttacking", false);
+
+        // Permitir movimiento nuevamente
+        if (movement != null)
+            movement.canMove = true;
 
         comboIndex++;
         if (comboIndex >= comboList.Count) comboIndex = 0;
@@ -70,7 +111,7 @@ public class PlayerAttack : MonoBehaviour
             ? Physics.OverlapSphere(origin, attack.range, enemyLayer)
             : Physics.OverlapSphere(origin, attack.range);
 
-        Debug.Log("[PlayerAttack] OverlapSphere encontró {hitColliders.Length} colliders para '{attack.nombre}' (range={attack.range}).");
+        Debug.Log($"[PlayerAttack] OverlapSphere encontró {hitColliders.Length} colliders para '{attack.nombre}' (range={attack.range}).");
 
         if (hitColliders.Length == 0)
         {
@@ -96,16 +137,16 @@ public class PlayerAttack : MonoBehaviour
                 if (enemy != null)
                 {
                     enemy.TakeDamage(attack.damage);
-                    Debug.Log("Golpeó a {enemy.name} con {attack.nombre} (daño={attack.damage}, angle={angleToTarget:F1})");
+                    Debug.Log($"Golpeó a {enemy.name} con {attack.nombre} (daño={attack.damage}, angle={angleToTarget:F1})");
                 }
                 else
                 {
-                    Debug.LogWarning("[PlayerAttack] Collider '{col.name}' (capa={LayerMask.LayerToName(col.gameObject.layer)}) no tiene componente Enemy (ni en parents/children).");
+                    Debug.LogWarning($"[PlayerAttack] Collider '{col.name}' (capa={LayerMask.LayerToName(col.gameObject.layer)}) no tiene componente Enemy (ni en parents/children).");
                 }
             }
             else
             {
-                Debug.Log("[PlayerAttack] '{col.name}' fuera de ángulo (angle={angleToTarget:F1}, requerido<={attack.angle/2f})");
+                Debug.Log($"[PlayerAttack] '{col.name}' fuera de ángulo (angle={angleToTarget:F1}, requerido<={attack.angle/2f})");
             }
         }
     }
