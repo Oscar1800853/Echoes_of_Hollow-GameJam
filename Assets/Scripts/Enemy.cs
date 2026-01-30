@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Pool;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IDamageable
 {
     [Header("Atributos del enemigo")]
     public int maxHealth = 100;

@@ -71,7 +71,7 @@ public class PlayerAttack : MonoBehaviour
         {
             animator.SetBool("IsAttacking", true);
             animator.SetInteger("ComboIndex", comboIndex);
-            
+
             // Trigger específico del ataque
             if (!string.IsNullOrEmpty(currentAttack.animationTrigger))
                 animator.SetTrigger(currentAttack.animationTrigger);
@@ -133,33 +133,33 @@ public class PlayerAttack : MonoBehaviour
 
             if (angleToTarget <= attack.angle / 2f)
             {
-                Enemy enemy = GetEnemyFromCollider(col);
-                if (enemy != null)
+                IDamageable damageable = GetDamageableFromCollider(col);
+                if (damageable != null)
                 {
-                    enemy.TakeDamage(attack.damage);
-                    Debug.Log($"Golpeó a {enemy.name} con {attack.nombre} (daño={attack.damage}, angle={angleToTarget:F1})");
+                    damageable.TakeDamage(attack.damage);
+                    Debug.Log($"Golpeó a {col.name} con {attack.nombre} (daño={attack.damage}, angle={angleToTarget:F1})");
                 }
                 else
                 {
-                    Debug.LogWarning($"[PlayerAttack] Collider '{col.name}' (capa={LayerMask.LayerToName(col.gameObject.layer)}) no tiene componente Enemy (ni en parents/children).");
+                    Debug.LogWarning($"[PlayerAttack] Collider '{col.name}' (capa={LayerMask.LayerToName(col.gameObject.layer)}) no tiene componente IDamageable (ni en parents/children).");
                 }
             }
             else
             {
-                Debug.Log($"[PlayerAttack] '{col.name}' fuera de ángulo (angle={angleToTarget:F1}, requerido<={attack.angle/2f})");
+                Debug.Log($"[PlayerAttack] '{col.name}' fuera de ángulo (angle={angleToTarget:F1}, requerido<={attack.angle / 2f})");
             }
         }
     }
 
-    private Enemy GetEnemyFromCollider(Collider col)
+    private IDamageable GetDamageableFromCollider(Collider col)
     {
         if (col == null) return null;
-        Enemy e = col.GetComponent<Enemy>();
-        if (e != null) return e;
-        e = col.GetComponentInParent<Enemy>();
-        if (e != null) return e;
-        e = col.GetComponentInChildren<Enemy>();
-        return e;
+        IDamageable d = col.GetComponent<IDamageable>();
+        if (d != null) return d;
+        d = col.GetComponentInParent<IDamageable>();
+        if (d != null) return d;
+        d = col.GetComponentInChildren<IDamageable>();
+        return d;
     }
 
     void OnDrawGizmosSelected()

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 
-public class FinalBoss : MonoBehaviour
+public class FinalBoss : MonoBehaviour, IDamageable
 {
     [Header("Atributos del jefe final")]
     public int maxHealth = 100;
@@ -123,7 +123,7 @@ public class FinalBoss : MonoBehaviour
         isAttacking = false;
     }
 
-    public void TakeDamange(int amount)
+    public void TakeDamage(int amount)
     {
         currentHealth -= amount;
         Debug.Log(gameObject.name + "recibio" + amount + "de daño. Vida restante" + currentHealth);
