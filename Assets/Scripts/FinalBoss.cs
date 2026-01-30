@@ -73,11 +73,6 @@ public class FinalBoss : MonoBehaviour, IDamageable
     {
         if (isDead) return;
 
-        if (!canMove)
-        {
-            UpdateAnimator(0f);
-            return;
-        }
 
         //comprobar si el jugador esta en rango
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
@@ -106,9 +101,12 @@ public class FinalBoss : MonoBehaviour, IDamageable
     {
         animator.SetFloat("Speed", Speed);
     }
+    
+    
     //Seguir al jugador
     private void ChasePlayer()
     {
+        agent.isStopped = false;
         agent.SetDestination(player.position);
         float currentSpeed = agent.velocity.magnitude;
         UpdateAnimator(currentSpeed);
@@ -116,8 +114,7 @@ public class FinalBoss : MonoBehaviour, IDamageable
 
     private void AttackPlayer()
     {
-        agent.SetDestination(transform.position);
-
+        agent.isStopped = true;
         UpdateAnimator(0f);
 
         Vector3 lookPos = player.position;
@@ -148,8 +145,8 @@ public class FinalBoss : MonoBehaviour, IDamageable
             yield return StartCoroutine(ExecuteAttack2());
         }
 
-        canMove = true;
         yield return new WaitForSeconds(timeBetweenAttacks);
+        canMove = true;
         isAttacking = false;
     }
 
@@ -174,14 +171,22 @@ public class FinalBoss : MonoBehaviour, IDamageable
                 Debug.Log("Ataque 1 conectado - Daño: " + attack1Damage);
             }
         }
+
+        if (animator != null)
+        {
+            animator.SetBool("Attack1", false);
+        }
     }
 
     // Ataque 2 - Ataque especial poderoso
     private IEnumerator ExecuteAttack2()
     {
-        Debug.Log("¡Jefe usa ATAQUE ESPECIAL!");
+        Debug.Log("¡Jefe usa ataque especial!");
 
-        //animator.SetTrigger("ataque2"); // Trigger para animación de ataque 2
+        if (animator !=null)
+        {
+            animator.SetBool("attack2", true);
+        }
 
         yield return new WaitForSeconds(attack2Delay);
 
@@ -193,6 +198,11 @@ public class FinalBoss : MonoBehaviour, IDamageable
                 playerHealth.TakeDamage(attack2Damage);
                 Debug.Log("Ataque 2 conectado - Daño: " + attack2Damage);
             }
+        }
+
+        if (animator !=null)
+        {
+            animator.SetBool("Attack2", false);
         }
     }
 
@@ -222,7 +232,10 @@ public class FinalBoss : MonoBehaviour, IDamageable
 
     private IEnumerator DyingCoroutine()
     {
-        //animator.SetTrigger ("morir");
+        if(animator !=null)
+        {
+            animator.SetBool("isDead", true);
+        }
 
         yield return new WaitForSeconds(timeBeforeDying);
 
