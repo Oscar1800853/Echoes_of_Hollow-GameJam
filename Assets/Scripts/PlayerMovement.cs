@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("Movimiento")]
     public float speed = 5f;
+    public float gravity = -9.81f;
 
     [Header("Dash")]
     public float dashSpeed = 15f;
@@ -19,19 +20,19 @@ public class PlayerMovement : MonoBehaviour
     public Camera mainCamera;
 
     [Header("Animación")]
-    [Tooltip("Velocidad de transición del blend tree (mayor = más suave)")]
+    [Tooltip("Velocidad de transición del blend tree")]
     public float animationSmoothTime = 0.1f;
 
     [HideInInspector]
-    public bool canMove = true; // Bloquea movimiento temporalmente
+    public bool canMove = true;
 
     private CharacterController controller;
     private PlayerInput playerInput;
     private Animator animator;
-    private Rigidbody rb;
 
     private Vector2 moveInput;
     private Vector3 moveDirection;
+    private float verticalVelocity = 0f;
 
     private bool isDashing = false;
     private float dashTime = 0f;
@@ -40,28 +41,17 @@ public class PlayerMovement : MonoBehaviour
     private InputAction moveAction;
     private InputAction dashAction;
 
-    private static PlayerMovement instance;
-
-    // Variables para suavizar las animaciones
     private float currentSpeed;
     private float speedVelocity;
 
     void Awake()
     {
-        // Instancia única y persistente
-        if (instance != null && instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        instance = this;
-        DontDestroyOnLoad(gameObject);
-
         controller = GetComponent<CharacterController>();
         playerInput = GetComponent<PlayerInput>();
         animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody>();
 
+         playerInput.notificationBehavior = PlayerNotifications.InvokeCSharpEvents;
+        
         if (mainCamera == null)
             mainCamera = Camera.main;
 
@@ -70,17 +60,7 @@ public class PlayerMovement : MonoBehaviour
         {
             moveAction = actions.FindAction("Move");
             dashAction = actions.FindAction("Dash");
-
-            if (dashAction == null)
-            {
-                dashAction = new InputAction("Dash", InputActionType.Button);
-                dashAction.AddBinding("<Keyboard>/space");
-                dashAction.AddBinding("<Gamepad>/buttonSouth");
-                dashAction.Enable();
-            }
         }
-
-        playerInput.notificationBehavior = PlayerNotifications.InvokeUnityEvents;
     }
 
     void OnEnable()
@@ -108,21 +88,13 @@ public class PlayerMovement : MonoBehaviour
             moveAction.canceled -= OnMove;
         }
 
-        if (dashAction != null)
-            dashAction.performed -= OnDash;
-
+        dashAction?.Disable();
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         mainCamera = Camera.main;
-
-        if (playerInput != null && !playerInput.enabled)
-            playerInput.enabled = true;
-
-        controller.enabled = false;
-        controller.enabled = true;
     }
 
     void Update()
@@ -133,13 +105,19 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
+        // Aplicar gravedad
+        if (controller.isGrounded)
+            verticalVelocity = -2f;
+        else
+            verticalVelocity += gravity * Time.deltaTime;
+
         if (isDashing)
         {
-            controller.Move(moveDirection * dashSpeed * Time.deltaTime);
+            Vector3 dashMove = moveDirection * dashSpeed + Vector3.up * verticalVelocity;
+            controller.Move(dashMove * Time.deltaTime);
             dashTime += Time.deltaTime;
             
-            // Actualizar animación de dash
-            UpdateAnimator(1.5f); // Velocidad alta para dash
+            UpdateAnimator(1.5f);
             animator.SetBool("IsDashing", true);
             
             if (dashTime >= dashDuration)
@@ -150,13 +128,13 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        // Verificar que mainCamera existe antes de usarla
         if (mainCamera == null)
         {
             mainCamera = Camera.main;
-            if (mainCamera == null) return; // Si aún no hay cámara, esperar al siguiente frame
+            if (mainCamera == null) return;
         }
 
+        // Calcular dirección de movimiento
         Vector3 camForward = mainCamera.transform.forward;
         Vector3 camRight = mainCamera.transform.right;
         camForward.y = 0f;
@@ -169,9 +147,11 @@ public class PlayerMovement : MonoBehaviour
             inputDir.Normalize();
 
         moveDirection = inputDir;
-        controller.Move(moveDirection * speed * Time.deltaTime);
 
-        // Actualizar animación de movimiento
+        // Combinar movimiento horizontal y vertical
+        Vector3 move = moveDirection * speed + Vector3.up * verticalVelocity;
+        controller.Move(move * Time.deltaTime);
+
         float targetSpeed = moveDirection.magnitude;
         UpdateAnimator(targetSpeed);
 
@@ -182,13 +162,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (animator == null) return;
 
-        // Suavizar el cambio de velocidad para transiciones más fluidas
         currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref speedVelocity, animationSmoothTime);
-        
-        // Actualizar el parámetro Speed del Blend Tree
         animator.SetFloat("Speed", currentSpeed);
-        
-        // Actualizar parámetro booleano para saber si está en movimiento
         animator.SetBool("IsMoving", currentSpeed > 0.01f);
     }
 
@@ -209,15 +184,9 @@ public class PlayerMovement : MonoBehaviour
 
     void RotateTowardsMouse()
     {
-        // Verificación más robusta antes de acceder a Mouse.current
-        if (mainCamera == null) return;
-        
-        // Verificar que Mouse.current existe y está disponible
-        if (Mouse.current == null) return;
-        
-        // Verificar que la posición del mouse está disponible
-        Vector2 mousePosition = Mouse.current.position.ReadValue();
+        if (mainCamera == null || Mouse.current == null) return;
 
+        Vector2 mousePosition = Mouse.current.position.ReadValue();
         Ray ray = mainCamera.ScreenPointToRay(mousePosition);
         Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
 
@@ -236,6 +205,5 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public Vector3 GetMoveDirection() => moveDirection;
-    
     public Animator GetAnimator() => animator;
 }

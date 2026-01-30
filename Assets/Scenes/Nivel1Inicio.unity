@@ -5274,6 +5274,10 @@ PrefabInstance:
       propertyPath: speed
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: -9015068739686460194, guid: 1159114ef6a851845afd6dc5b08e2567, type: 3}
+      propertyPath: currentHealth
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: -3988220991844789130, guid: 1159114ef6a851845afd6dc5b08e2567, type: 3}
       propertyPath: comboList.Array.data[0].range
       value: 3
@@ -7944,7 +7948,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2127809649}
   - component: {fileID: 2127809648}
-  - component: {fileID: 2127809647}
   - component: {fileID: 2127809650}
   - component: {fileID: 2127809646}
   - component: {fileID: 2127809645}
@@ -8019,21 +8022,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &2127809647
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2127809643}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c834aa52e8050c4594c4cf3cf582f7b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealthBar
-  _playerHealth: {fileID: 0}
-  _barRect: {fileID: 0}
-  _mask: {fileID: 1778849082}
 --- !u!114 &2127809648
 MonoBehaviour:
   m_ObjectHideFlags: 0
