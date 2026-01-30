@@ -588,7 +588,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHealth: 100
   currentHealth: 100
-  timeBeforeMenu: 3
+  timeBeforeMenu: 0.2
   menuSceneName: menu
 --- !u!114 &7954337238174119336
 MonoBehaviour:
