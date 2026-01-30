@@ -80,6 +80,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: -7163675338743506324, guid: 6091bda8d91da9141b2e49d0b45b10e9, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 45e6c4162df53ce449f748aac7d04978, type: 2}
     - target: {fileID: -6894935817829897093, guid: 6091bda8d91da9141b2e49d0b45b10e9, type: 3}
       propertyPath: m_Layer
       value: 7
@@ -306,8 +310,100 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2388309824474784306, guid: 6091bda8d91da9141b2e49d0b45b10e9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6489721029426594068}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6091bda8d91da9141b2e49d0b45b10e9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2308462208985255650}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6091bda8d91da9141b2e49d0b45b10e9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1234770545824485424}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6091bda8d91da9141b2e49d0b45b10e9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2405755026089461879}
   m_SourcePrefab: {fileID: 100100000, guid: 6091bda8d91da9141b2e49d0b45b10e9, type: 3}
+--- !u!1 &1612681445820501932 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6091bda8d91da9141b2e49d0b45b10e9, type: 3}
+  m_PrefabInstance: {fileID: 1918547644413883133}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2308462208985255650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1612681445820501932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa72c0dad7dc5b64e9516e2287303cf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FinalBoss
+  maxHealth: 100
+  agent: {fileID: 1234770545824485424}
+  player: {fileID: 0}
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 8
+  whatIsPlayer:
+    serializedVersion: 2
+    m_Bits: 64
+  canMove: 1
+  timeBetweenAttacks: 8
+  attack1Damage: 10
+  attack1Delay: 2
+  attack1Range: 2.5
+  attack2Damage: 20
+  attack2Delay: 3
+  attack2Range: 3
+  attack1Probability: 70
+  isAttacking: 0
+  sightRange: 10
+  timeBeforeDying: 3
+--- !u!195 &1234770545824485424
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1612681445820501932}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!136 &2405755026089461879
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1612681445820501932}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2.23
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.05, z: 0}
 --- !u!4 &4288825197497585871 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2388309824474784306, guid: 6091bda8d91da9141b2e49d0b45b10e9, type: 3}
@@ -373,6 +469,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -23.199
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: e0cba33454545f94b8365f3d24481f3d, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 45e6c4162df53ce449f748aac7d04978, type: 2}
     - target: {fileID: 919132149155446097, guid: e0cba33454545f94b8365f3d24481f3d, type: 3}
       propertyPath: m_Name
       value: BossArma

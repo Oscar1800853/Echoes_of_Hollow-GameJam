@@ -3197,6 +3197,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5775228022797011336, guid: 877104ef0b32d41468121891b767883b, type: 3}
+      propertyPath: damageAmount
+      value: 15
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3259,6 +3263,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5775228022797011336, guid: 877104ef0b32d41468121891b767883b, type: 3}
+      propertyPath: damageAmount
+      value: 15
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3277,6 +3285,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 832676128}
     m_Modifications:
+    - target: {fileID: 1556391313456030773, guid: 483398fff3496ae40bf97e1cfdaba40f, type: 3}
+      propertyPath: damageAmount
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 4975377558865225325, guid: 483398fff3496ae40bf97e1cfdaba40f, type: 3}
       propertyPath: m_Name
       value: mutante
@@ -4739,6 +4751,10 @@ PrefabInstance:
     - target: {fileID: 3182120744719208808, guid: 877104ef0b32d41468121891b767883b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5775228022797011336, guid: 877104ef0b32d41468121891b767883b, type: 3}
+      propertyPath: damageAmount
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6350,6 +6366,10 @@ PrefabInstance:
     - target: {fileID: 3182120744719208808, guid: 877104ef0b32d41468121891b767883b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5775228022797011336, guid: 877104ef0b32d41468121891b767883b, type: 3}
+      propertyPath: damageAmount
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -70,9 +70,6 @@ public class Enemy : MonoBehaviour, IDamageable
 
         animator = GetComponent<Animator>();
 
-        
-
-
     }
 
     void Start()

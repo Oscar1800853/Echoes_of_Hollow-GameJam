@@ -17,7 +17,7 @@ public class HealthPotion : MonoBehaviour
 
         if (destroyOnUse)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 }

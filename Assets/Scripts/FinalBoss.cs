@@ -239,6 +239,19 @@ public class FinalBoss : MonoBehaviour, IDamageable
 
         yield return new WaitForSeconds(timeBeforeDying);
 
+        if (CameraPersist.instance !=null)
+        {
+            CameraPersist.instance.ResetCamera();
+        }
+
+        Destroy(gameObject);
+
+        if (player !=null)
+        {
+            Destroy(player.gameObject);
+            Debug.Log("Jugador destruido");
+        }
+
         SceneManager.LoadScene("CinemFinal");
     }
 
