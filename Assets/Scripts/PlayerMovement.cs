@@ -28,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController controller;
     private PlayerInput playerInput;
     private Animator animator;
+    private Rigidbody rb;
 
     private Vector2 moveInput;
     private Vector3 moveDirection;
@@ -59,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
         controller = GetComponent<CharacterController>();
         playerInput = GetComponent<PlayerInput>();
         animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>();
 
         if (mainCamera == null)
             mainCamera = Camera.main;

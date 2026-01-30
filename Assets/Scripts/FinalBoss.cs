@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
@@ -15,24 +16,34 @@ public class FinalBoss : MonoBehaviour, IDamageable
     public LayerMask whatIsGround;
     public LayerMask whatIsPlayer;
 
-
-    //movement
-
-
+    public bool canMove = true;
+    
     //ataque
     public float timeBetweenAttacks = 8f;
-    public float damageAmount = 10f;
+
+    //ataque1
+    public float attack1Damage = 10f;
+    public float attack1Delay = 0.5f;
+    public float attack1Range = 2f;
+
+    //ataque 2
+    public float attack2Damage = 20f;
+    public float attack2Delay = 1f;
+    public float attack2Range = 3f;
+
+    //Probabilidad entre ataques
+    public int attack1Probability = 70;
+
     public bool isAttacking;
-    public float attackDelay;
 
 
     //estados
-    public float sightRange = 10f, attackRange = 2f;
+    public float sightRange = 10f;
     private bool playerInSightRange, playerInAttackRange;
     public float timeBeforeDying = 3f;
     private bool isDead;
 
-    //Animator animator
+    Animator animator;
 
     private void Awake()
     {
@@ -50,7 +61,7 @@ public class FinalBoss : MonoBehaviour, IDamageable
         if (agent == null)
             Debug.LogError("No hay NavMeshAgent asignado al boss final");
 
-        //animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
     }
 
     private void Start()
@@ -62,9 +73,18 @@ public class FinalBoss : MonoBehaviour, IDamageable
     {
         if (isDead) return;
 
+        if (!canMove)
+        {
+            UpdateAnimator(0f);
+            return;
+        }
+
         //comprobar si el jugador esta en rango
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
-        playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
+        
+        // Usar el rango mayor de los dos ataques
+        float maxAttackRange = Mathf.Max(attack1Range, attack2Range);
+        playerInAttackRange = Physics.CheckSphere(transform.position, maxAttackRange, whatIsPlayer);
 
         //Logica estados
         if (playerInSightRange && !playerInAttackRange)
@@ -75,19 +95,30 @@ public class FinalBoss : MonoBehaviour, IDamageable
         {
             AttackPlayer();
         }
+
+        else
+        {
+            UpdateAnimator(0f);
+        }
     }
 
+    private void UpdateAnimator(float Speed)
+    {
+        animator.SetFloat("Speed", Speed);
+    }
     //Seguir al jugador
     private void ChasePlayer()
     {
         agent.SetDestination(player.position);
-        //animator.SetFloat("perseguir",0.1f);
+        float currentSpeed = agent.velocity.magnitude;
+        UpdateAnimator(currentSpeed);
     }
 
     private void AttackPlayer()
     {
         agent.SetDestination(transform.position);
-        //animator.SetFloat("moverse", 0f);
+
+        UpdateAnimator(0f);
 
         Vector3 lookPos = player.position;
         lookPos.y = transform.position.y;
@@ -102,26 +133,69 @@ public class FinalBoss : MonoBehaviour, IDamageable
     private IEnumerator AttackRoutine()
     {
         isAttacking = true;
+        canMove = false;
 
-        //animator.SetTrigger("atacar");
+        // Elegir ataque aleatoriamente
+        int randomValue = Random.Range(0, 100);
+        bool useAttack1 = randomValue < attack1Probability;
 
-        yield return new WaitForSeconds(attackDelay);
+        if (useAttack1)
+        {
+            yield return StartCoroutine(ExecuteAttack1());
+        }
+        else
+        {
+            yield return StartCoroutine(ExecuteAttack2());
+        }
 
-        Debug.Log("el jefe ataca");
+        canMove = true;
+        yield return new WaitForSeconds(timeBetweenAttacks);
+        isAttacking = false;
+    }
 
-        if (player != null && Vector3.Distance(transform.position, player.position) <= attackRange)
+    // Ataque 1 - Ataque normal
+    private IEnumerator ExecuteAttack1()
+    {
+        Debug.Log("¡Jefe usa ataque normal!");
+
+        if(animator != null)
+        {
+            animator.SetBool("Attack1", true);
+        }
+
+        yield return new WaitForSeconds(attack1Delay);
+
+        if (player != null && Vector3.Distance(transform.position, player.position) <= attack1Range)
         {
             PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
-                playerHealth.TakeDamage(damageAmount);
+                playerHealth.TakeDamage(attack1Damage);
+                Debug.Log("Ataque 1 conectado - Daño: " + attack1Damage);
             }
         }
-
-        yield return new WaitForSeconds(timeBetweenAttacks);
-
-        isAttacking = false;
     }
+
+    // Ataque 2 - Ataque especial poderoso
+    private IEnumerator ExecuteAttack2()
+    {
+        Debug.Log("¡Jefe usa ATAQUE ESPECIAL!");
+
+        //animator.SetTrigger("ataque2"); // Trigger para animación de ataque 2
+
+        yield return new WaitForSeconds(attack2Delay);
+
+        if (player != null && Vector3.Distance(transform.position, player.position) <= attack2Range)
+        {
+            PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(attack2Damage);
+                Debug.Log("Ataque 2 conectado - Daño: " + attack2Damage);
+            }
+        }
+    }
+
 
     public void TakeDamage(int amount)
     {
@@ -162,6 +236,9 @@ public class FinalBoss : MonoBehaviour, IDamageable
         Gizmos.DrawWireSphere(transform.position, sightRange);
 
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
+        Gizmos.DrawWireSphere(transform.position, attack1Range);
+
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, attack2Range);
     }
 }
